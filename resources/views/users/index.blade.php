@@ -6,10 +6,11 @@
 
 <div class="card">
     <div class="card-body">
+        @include('partials.messages')
         <div class="card-header">
             <h4 class="card-title">Users List</h4>
-            <div class="col-6 col-sm-4 col-md-2 col-xl-auto py-3">
-                <a href="{{ route('users.create') }}" class="btn btn-lime w-100">
+            <div class="col text-end">
+                <a href="{{ route('users.create') }}" class="btn btn-lime">
                     Create User
                 </a>
             </div>
@@ -38,12 +39,20 @@
                             @endforeach
                         </td>
                         <td class="sort-created_at">{{ $user->created_at }}</td>
-                        <td class="sort-action"><a class="btn btn-sm btn-info" href="{{ route('users.edit', $user) }}">
-                            Edit
-                        </a></td>
+                        <td class="sort-action">
+                            <a class="btn btn-sm btn-info" href="{{ route('users.edit', $user->id) }}">Edit</a>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are your sure?');" style="display: inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <input type="submit" class="btn btn-sm btn-danger" value="Delete">
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
-            {{!! $users->links() !!}}
-        </
+            {{-- {!! $users->links() !!} --}}
+    </div>
+</div>
+
+@endsection

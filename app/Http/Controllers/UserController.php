@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->paginate(10);
+        $users = User::with('roles')->latest()->get();
         return view('users.index', compact('users'));
     }
 
@@ -36,7 +36,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $this->validate($request,[
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone_number' => ['required', 'string', 'numeric', 'digits:10', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed']
+        ]);
+        $validated['terms_accepted'] = 1;
+        $validated['address'] = $request->address;
+        $user = User::create($validated);
+        $user->assignRole('user');
+        return redirect()->route('users.index')->with('success','User has been created successfully.');
     }
 
     /**
@@ -56,9 +67,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -68,9 +79,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $validated = $this->validate($request,[
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone_number' => ['required', 'string', 'numeric', 'digits:10', 'unique:users'],
+        ]);
+        $validated['address'] = $request->address;
+        $user->update($validated);
+        return redirect()->route('users.index')->with('success','User has been updated successfully.');
     }
 
     /**
@@ -79,8 +98,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        //return $user;
+        $user->delete();
+        return redirect()->route('users.index')->with('success','User has been deleted successfully.');
     }
 }

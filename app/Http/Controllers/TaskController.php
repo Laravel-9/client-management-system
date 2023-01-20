@@ -65,7 +65,8 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        return $task = Task::with('user', 'client', 'project')->find($id);
+        $task = Task::with('user', 'client', 'project')->find($id);
+        return view('tasks.show', compact('task'));
     }
 
     /**

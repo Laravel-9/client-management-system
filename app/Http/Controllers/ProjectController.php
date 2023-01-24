@@ -60,9 +60,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project)
+    public function show($id)
     {
-        return $project = Project::with('user', 'client', 'task')->find($id);
+        $project = Project::with('user', 'client', 'tasks')->find($id);
+        return view('projects.show', compact('project'));
     }
 
     /**

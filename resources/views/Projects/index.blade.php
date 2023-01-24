@@ -32,7 +32,7 @@
                 <tbody class="table-tbody">
                 @foreach($projects as $project)
                     <tr>
-                        <td class="sort-title">{{ $project->title }}</td>
+                        <td class="sort-title"><a href="{{ route('projects.show', $project->id) }}">{{ $project->title }}</a></td>
                         <td class="sort-user">{{ $project->user->first_name.' '.$project->user->last_name }}</td>
                         <td class="sort-client">{{ $project->client->company_name }}</td>
                         <td class="sort-deadline">{{ date('d/m/Y', strtotime($project->deadline)) }}</td>

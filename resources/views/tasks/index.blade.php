@@ -8,7 +8,7 @@
     <div class="card-body">
         @include('partials.messages')
         <div class="card-header">
-            <h4 class="card-title">tasks List</h4>
+            <h4 class="card-title">Tasks List</h4>
             <div class="col text-end">
                 <a href="{{ route('tasks.create') }}" class="btn btn-lime">
                     Create Task
@@ -50,7 +50,7 @@
                 </tbody>
             </table>
             {{-- {!! $tasks->links() !!} --}}
+        </div>
     </div>
-</div>
 
 @endsection
